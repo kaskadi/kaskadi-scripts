@@ -1,0 +1,24 @@
+{
+  "name": "kaskadi-scripts",
+  "version": "1.0.0",
+  "description": "Repository that serves as collection for Kaskadi app helper scripts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaskadi/kaskadi-scripts.git"
+  },
+  "keywords": [],
+  "author": "Klimapartner GmbH <kontakt@klimapartner.de> (https://klimapartner.de)",
+  "contributors": [
+    "Holger Will <h.will@klimapartner.de>",
+    "Alexis Lemaire <a.lemaire@klimapartner.de>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kaskadi/kaskadi-scripts/issues"
+  },
+  "homepage": "https://github.com/kaskadi/kaskadi-scripts#readme"
+}
