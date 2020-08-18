@@ -2,7 +2,7 @@
   "name": "kaskadi-scripts",
   "version": "1.0.0",
   "description": "Repository that serves as collection for Kaskadi app helper scripts",
-  "main": "index.js",
+  "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
