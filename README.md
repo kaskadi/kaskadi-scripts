@@ -1,2 +1,3 @@
 # kaskadi-scripts
-collection of helper scripts for Kaskadi app
+
+Repository that serves as collection for Kaskadi app helper scripts
