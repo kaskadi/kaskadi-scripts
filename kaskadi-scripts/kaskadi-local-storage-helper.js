@@ -4,7 +4,7 @@ class KaskadiLocalStorage {
     for (const key of keys) {
       data[key] = localStorage.getItem(key)
     }
-    return data;
+    return data
   }
   static set (data) {
     for (const prop in data) {
@@ -12,13 +12,13 @@ class KaskadiLocalStorage {
       value = typeof value === 'object' && value !== null ? JSON.stringify(value) : value
       localStorage.setItem(prop, value)
     }
-    return true;
+    return true
   }
   static remove (keys) {
     for (const key of keys) {
       localStorage.removeItem(key)
     }
-    return true;
+    return true
   }
 }
 
