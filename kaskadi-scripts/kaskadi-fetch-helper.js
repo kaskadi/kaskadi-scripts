@@ -1,7 +1,6 @@
+/* global fetch, localStorage, atob, DOMParser */
 // Helper class containing all methods for content fetching
-
 import { KaskadiAuth } from './kaskadi-auth-helper.js'
-import { KaskadiLog } from './kaskadi-log-helper.js'
 
 const kaskadiAppElement = document.querySelector('kaskadi-app')
 
@@ -9,13 +8,13 @@ class KaskadiFetch {
   // Utility method to send request to a secured endpoint
   static async securedFetch (url, method, body) {
     if (!url) {
-      throw 'A URL must be provided in order to fetch'
+      throw new Error('A URL must be provided in order to fetch')
     }
     const jwt = localStorage.getItem('cognitoJWT')
     const init = {
-      method: method ? method : 'GET',
+      method: method || 'GET',
       headers: {
-        'Authorization': `Bearer ${jwt}`
+        Authorization: `Bearer ${jwt}`
       },
       body
     }
@@ -23,15 +22,15 @@ class KaskadiFetch {
       const res = await fetch(url, init).then(async (res) => {
         const body = await res.json()
         if (res.status !== 200) {
-          throw {
+          throw new Error(JSON.stringify({
             statusCode: res.status,
             ...body
-          }
+          }))
         }
         return body
       })
       return res
-    } catch(err) {
+    } catch (err) {
       // if we receive an authorization error that means that our JWT is most likely expired so we refresh it and call again the method to get a response
       if (err.statusCode === 401) {
         const refreshToken = await localStorage.getItem('refreshToken')
@@ -40,11 +39,12 @@ class KaskadiFetch {
           KaskadiAuth.logout()
           return
         }
-        return await securedFetch(url, method, body)
+        return await this.securedFetch(url, method, body)
       }
       return Promise.reject(err)
     }
   }
+
   // Utility method to determine whether signed URL information need to be refreshed
   static signedUrlNeedsRefresh () {
     const signedUrlData = KaskadiFetch.getSignedUrlData()
@@ -61,6 +61,7 @@ class KaskadiFetch {
     }
     return false
   }
+
   // Utility method to refresh signedUrl
   static async refreshSignedUrl () {
     const signedUrlRes = await KaskadiFetch.securedFetch(`${kaskadiAppElement.appData.kaskadiAPIDomain}/auth/get-signed-url`)
@@ -70,6 +71,7 @@ class KaskadiFetch {
     localStorage.setItem('signedUrlSignature', signedUrlSearchParams.get('Signature'))
     localStorage.setItem('signedUrlKeyPairId', signedUrlSearchParams.get('Key-Pair-Id'))
   }
+
   // Utility method to retrieve signed URL data
   static getSignedUrlData () {
     return {
@@ -78,15 +80,17 @@ class KaskadiFetch {
       keyPairId: localStorage.getItem('signedUrlKeyPairId')
     }
   }
+
   // Utility method to fetch the app-section mapping and the new routerPaths value
   static fetchApps () {
     return fetch(`${kaskadiAppElement.appData.kaskadiAPIDomain}/apps`).then(res => res.json())
   }
+
   // Utility to fetch loading spinner from CDN
   static async fetchLoadingSpinner () {
     const parser = new DOMParser()
     const loadingSpinnerData = await (await fetch(`${kaskadiAppElement.appData.publicDistribution}/imgs/icons/loading-spinner.svg`)).text()
-    const loadingSpinner = parser.parseFromString(loadingSpinnerData, "image/svg+xml").querySelector('svg')
+    const loadingSpinner = parser.parseFromString(loadingSpinnerData, 'image/svg+xml').querySelector('svg')
     return loadingSpinner
   }
 }

@@ -3,9 +3,9 @@
 const kaskadiAppElement = document.querySelector('kaskadi-app')
 
 class KaskadiLog {
-  static log(severity, grouped, ...groupData) {
+  static log (severity, grouped, ...groupData) {
     if (kaskadiAppElement.appData.testEnv) {
-      let data = groupData
+      const data = groupData
       if (grouped) {
         console.group(groupData[0])
         data.shift()

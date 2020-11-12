@@ -1,3 +1,4 @@
+/* global localStorage */
 // Helper class containg methods to initialize our app
 import { KaskadiLoad } from './kaskadi-load-helper.js'
 import { KaskadiFetch } from './kaskadi-fetch-helper.js'
@@ -8,7 +9,7 @@ import { KaskadiLog } from './kaskadi-log-helper.js'
 class KaskadiInit {
   // Method to initialize our app with initial property values
   static appInit () {
-    const testEnv = window.location.hostname === 'localhost' ? true : false
+    const testEnv = window.location.hostname === 'localhost'
     const kaskadiAPIDomain = 'https://api.klimapartner.net'
     const publicDistribution = testEnv ? `http://${window.location.host}` : 'https://cdn.klimapartner.net'
     const privateDistribution = testEnv ? `http://${window.location.host}` : 'https://d1flflxl3xfwo0.cloudfront.net'

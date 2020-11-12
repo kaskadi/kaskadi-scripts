@@ -1,11 +1,14 @@
+/* global localStorage */
+
 class KaskadiLocalStorage {
   static get (keys) {
-    let data = {}
+    const data = {}
     for (const key of keys) {
       data[key] = localStorage.getItem(key)
     }
     return data
   }
+
   static set (data) {
     for (const prop in data) {
       let value = data[prop]
@@ -14,6 +17,7 @@ class KaskadiLocalStorage {
     }
     return true
   }
+
   static remove (keys) {
     for (const key of keys) {
       localStorage.removeItem(key)
