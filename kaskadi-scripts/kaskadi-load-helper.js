@@ -1,6 +1,6 @@
+/* global customElements, fetch */
 // Helper class containing all methods for loading content
 import { KaskadiFetch } from './kaskadi-fetch-helper.js'
-import { KaskadiAuth } from './kaskadi-auth-helper.js'
 import { KaskadiLog } from './kaskadi-log-helper.js'
 
 const kaskadiAppElement = document.querySelector('kaskadi-app')
@@ -13,14 +13,14 @@ class KaskadiLoad {
   //  - srcUrl (String): URL where the script file can be found. Required
   //  - appName (String): name of the custom element defined in the script to be added. Required
   static async loadScript (options) {
-    if (typeof options.secured === "undefined") {
-      throw `"secured" (Boolean) must be defined in the "options" parameter of this method`
+    if (typeof options.secured === 'undefined') {
+      throw new Error('"secured" (Boolean) must be defined in the "options" parameter of this method')
     }
     if (!options.srcUrl) {
-      throw `"srcUrl" (String) must be defined in the "options" parameter of this method`
+      throw new Error('"srcUrl" (String) must be defined in the "options" parameter of this method')
     }
     if (!options.appName) {
-      throw `"appName" (String) must be defined in the "options" parameter of this method`
+      throw new Error('"appName" (String) must be defined in the "options" parameter of this method')
     }
     let { secured, srcUrl, appName } = options
     if (secured) {
@@ -45,6 +45,7 @@ class KaskadiLoad {
       document.head.querySelector(`#${appName}-script`).src = srcUrl
     }
   }
+
   // Utility method to load an application in a given element. Recommended to use this function with try/catch to avoid execution termination
   // Takes as parameter:
   // - options (object): this encapsulate the options for this function
@@ -53,17 +54,17 @@ class KaskadiLoad {
   //    - path (string): path to our application inside of its distribution. Required
   //    - dest (Element): the destination element into which we want to load our app. Required
   static async loadApp (options) {
-    if (typeof options.secured === "undefined") {
-      throw `"secured" (Boolean) must be defined in the "options" parameter of this method`
+    if (typeof options.secured === 'undefined') {
+      throw new Error('"secured" (Boolean) must be defined in the "options" parameter of this method')
     }
     if (!options.domain) {
-      throw `"domain" (String) must be defined in the "options" parameter of this method`
+      throw new Error('"domain" (String) must be defined in the "options" parameter of this method')
     }
     if (!options.path) {
-      throw `"path" (String) must be defined in the "options" parameter of this method`
+      throw new Error('"path" (String) must be defined in the "options" parameter of this method')
     }
     if (!options.dest) {
-      throw `"dest" (Element) must be defined in the "options" parameter of this method`
+      throw new Error('"dest" (Element) must be defined in the "options" parameter of this method')
     }
     const { secured, domain, path, dest } = options
     const appName = path.split('/')[path.split('/').length - 1].split('.')[0]

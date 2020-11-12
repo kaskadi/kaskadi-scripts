@@ -4,7 +4,8 @@
   "description": "Repository that serves as collection for Kaskadi app helper scripts",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "standard --fix && mocha test/*.test.js --require test/mocha-color-setter.js",
+    "coverage": "nyc npm run test"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,11 @@
         }
       ]
     }
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0",
+    "standard": "^16.0.2"
   }
 }

@@ -1,3 +1,4 @@
+/* global fetch, localStorage, atob */
 // Helper class containing methods to handle authentication
 
 import { KaskadiLog } from './kaskadi-log-helper.js'
@@ -12,7 +13,7 @@ class KaskadiAuth {
       // if there is a JWT we retrieve the expiration time
       const expTime = JSON.parse(atob(jwt.split('.')[1])).exp
       const currentTime = (new Date()).getTime()
-      if (expTime*1000 < currentTime) {
+      if (expTime * 1000 < currentTime) {
         // if JWT has expired, we refresh it
         KaskadiLog.log(1, false, 'Token has expired, refreshing it')
         const refreshToken = localStorage.getItem('refreshToken')
@@ -30,6 +31,7 @@ class KaskadiAuth {
     // if we didn't find a JWT then the user isn't authenticated
     return false
   }
+
   // Helper method for refreshing JWT token
   static async refreshJwt (refreshToken, method) {
     const init = {
@@ -46,6 +48,7 @@ class KaskadiAuth {
       body: resBody
     }
   }
+
   // Logout event handler
   static async logout (ev) {
     const router = kaskadiAppElement.shadowRoot.querySelector('kaskadi-router')
@@ -65,6 +68,7 @@ class KaskadiAuth {
     }
     router.goto('/login')
   }
+
   // Clear storage helper method
   static clearLocalStorage () {
     // clear all secured data
