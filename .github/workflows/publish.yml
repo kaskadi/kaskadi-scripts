@@ -12,9 +12,34 @@ env:
   AWS_KEY_SECRET: ${{ secrets.AWS_KEY_SECRET }}
   BUCKET: ${{ secrets.S3_PUBLIC_BUCKET }}
 jobs:
+  # scan code using CodeQL
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+          - 'javascript'
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
   publish:
     runs-on: ubuntu-latest
+    needs: analyze
     steps:
     - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: npm i
+    - name: Test
+      run: npm test
     - name: Upload files to S3 bucket
       uses: kaskadi/action-s3cp@master
