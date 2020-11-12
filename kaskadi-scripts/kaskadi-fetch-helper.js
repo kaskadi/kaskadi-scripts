@@ -6,43 +6,29 @@ const kaskadiAppElement = document.querySelector('kaskadi-app')
 
 class KaskadiFetch {
   // Utility method to send request to a secured endpoint
-  static async securedFetch (url, method, body) {
+  static securedFetch (url, method, body) {
     if (!url) {
       throw new Error('A URL must be provided in order to fetch')
     }
-    const jwt = localStorage.getItem('cognitoJWT')
     const init = {
       method: method || 'GET',
-      headers: {
-        Authorization: `Bearer ${jwt}`
-      },
+      headers: { Authorization: `Bearer ${localStorage.getItem('cognitoJWT')}` },
       body
     }
-    try {
-      const res = await fetch(url, init).then(async (res) => {
+    return fetch(url, init)
+      .then(async res => {
         const body = await res.json()
+        if (res.status === 401) {
+          const refreshData = await KaskadiAuth.refreshJwt(localStorage.getItem('refreshToken'), 'Cognito')
+          return refreshData.statusCode === 200
+            ? this.securedFetch(url, method, body)
+            : KaskadiAuth.logout().then(() => Promise.reject(new Error('Authentication data expired, please log in again.')))
+        }
         if (res.status !== 200) {
-          throw new Error(JSON.stringify({
-            statusCode: res.status,
-            ...body
-          }))
+          throw new Error('Something happened...')
         }
         return body
       })
-      return res
-    } catch (err) {
-      // if we receive an authorization error that means that our JWT is most likely expired so we refresh it and call again the method to get a response
-      if (err.statusCode === 401) {
-        const refreshToken = await localStorage.getItem('refreshToken')
-        const refreshData = await KaskadiAuth.refreshJwt(refreshToken, 'Cognito')
-        if (refreshData.statusCode !== 200) {
-          KaskadiAuth.logout()
-          return
-        }
-        return await this.securedFetch(url, method, body)
-      }
-      return Promise.reject(err)
-    }
   }
 
   // Utility method to determine whether signed URL information need to be refreshed
